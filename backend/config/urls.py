@@ -15,9 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import path, include
 
+
+def home(request):
+    return JsonResponse({
+        'message': 'TaskFlow API is running',
+        'todos': '/api/todos/',
+    })
+
 urlpatterns = [
+    path('', home),
     path('admin/', admin.site.urls),
     path('api/', include('todos.urls')),
 ]

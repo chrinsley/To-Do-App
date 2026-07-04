@@ -15,7 +15,7 @@ ALLOWED_HOSTS = [
     host.strip()
     for host in os.environ.get(
         'ALLOWED_HOSTS',
-        'localhost,127.0.0.1,to-do-app-production-9bfe.up.railway.app',
+        'localhost,127.0.0.1,to-do-app-production-e925.up.railway.app',
     ).split(',')
     if host.strip()
 ]
