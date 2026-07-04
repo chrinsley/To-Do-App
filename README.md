@@ -32,39 +32,57 @@ App runs at **http://localhost:5173**
 
 Make sure the Django server is running first so the frontend can fetch todos.
 
-To point the frontend at a deployed backend, create `frontend/.env`:
+## Deploy Backend To Railway
 
+1. Push this repo to GitHub.
+
+2. In Railway, create a project from the GitHub repo.
+
+3. Set the backend service **Root Directory** to:
+
+```text
+backend
 ```
-VITE_API_URL=https://your-app.up.railway.app/api/todos/
+
+4. Add a PostgreSQL database service.
+
+5. In the backend service variables, add:
+
+```env
+DEBUG=False
+SECRET_KEY=<generate-a-long-random-string>
+ALLOWED_HOSTS=<your-railway-domain>.up.railway.app
+CORS_ALLOWED_ORIGINS=https://<your-vercel-domain>.vercel.app
+DATABASE_URL=${{Postgres.DATABASE_URL}}
 ```
 
-## Deploy backend to Railway
+6. Generate a public Railway domain, then test:
 
-1. Push your code to GitHub.
+```text
+https://<your-railway-domain>.up.railway.app/api/todos/
+```
 
-2. Go to [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub repo**.
+## Deploy Frontend To Vercel
 
-3. Select your repo, then set the **Root Directory** to `backend`.
+1. Import the same GitHub repo in Vercel.
 
-4. Add a **PostgreSQL** database:
-   - Click **+ New** → **Database** → **PostgreSQL**
-   - Railway auto-sets `DATABASE_URL` on your Django service.
+2. Set the frontend **Root Directory** to:
 
-5. In your Django service **Variables**, add:
+```text
+frontend
+```
 
-   | Variable | Value |
-   |----------|-------|
-   | `DEBUG` | `False` |
-   | `SECRET_KEY` | a long random string |
-   | `CORS_ALLOWED_ORIGINS` | your frontend URL, e.g. `https://your-frontend.vercel.app` |
+3. Vercel should detect Vite automatically:
 
-   `ALLOWED_HOSTS` is set automatically from Railway's domain.
+```text
+Build Command: npm run build
+Output Directory: dist
+```
 
-6. Click **Deploy**. Railway will install deps, run migrations, collect static files, and start Gunicorn.
+4. Add this frontend environment variable in Vercel:
 
-7. Open your service **Settings** → **Networking** → **Generate Domain** to get a public URL like `https://your-app.up.railway.app`.
+```env
+VITE_API_URL=https://<your-railway-domain>.up.railway.app/api/todos/
+```
 
-8. Test the API: `https://your-app.up.railway.app/api/todos/`
-
-9. Update your frontend `.env` with the Railway URL and restart `npm run dev`.
-
+5. Deploy the frontend, then copy the Vercel URL into Railway's `CORS_ALLOWED_ORIGINS`.
