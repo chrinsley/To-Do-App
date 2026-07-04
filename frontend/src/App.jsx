@@ -43,7 +43,7 @@ export default function App() {
       setTodos([todo, ...todos])
       setTitle('')
     } catch {
-      setError('Could not add todo. Make sure the backend is running on port 8000.')
+      setError('Could not add todo. Check that your API URL is correct and CORS allows this frontend.')
     }
   }
 
