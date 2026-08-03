@@ -18,9 +18,10 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
-if railway_domain := os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
-    ALLOWED_HOSTS.append(railway_domain)
+render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
+if render_hostname:
+    ALLOWED_HOSTS.append(render_hostname)
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -113,5 +114,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS.copy()
-if railway_domain:
-    CSRF_TRUSTED_ORIGINS.append(f'https://{railway_domain}')
+render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+
+if render_hostname:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{render_hostname}")
