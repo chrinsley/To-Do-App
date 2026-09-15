@@ -2,6 +2,16 @@
 
 A simple todo app with a **Django REST API** backend and a **React + Vite** frontend.
 
+## Problem This Project Solves
+
+This project provides a simple way to create, view, update, and delete todo items from one place. It solves the problem of managing daily tasks through a clear web interface backed by a REST API, making the app easy to use and ready to extend.
+
+## Future Upgrades
+
+- Add user authentication with **JWT (JSON Web Tokens)**.
+- Give each authenticated user their own private todo list.
+- Restrict todo creation, editing, and deletion to the user who owns each todo.
+
 ## Backend (Django)
 
 ```bash
