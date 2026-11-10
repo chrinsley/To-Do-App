@@ -12,6 +12,15 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
+CORS_ALLOWED_ORIGINS = [
+    "https://to-do-app-phi-sepia.vercel.app",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://to-do-app-phi-sepia.vercel.app",
+]
+
+
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
@@ -35,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
