@@ -11,20 +11,16 @@ SECRET_KEY = os.environ.get(
 )
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
-
 CORS_ALLOWED_ORIGINS = [
-    "https://to-do-app-phi-sepia.vercel.app",
+    "https://to-do-e1hkv67in-chrinsley.vercel.app",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://to-do-app-phi-sepia.vercel.app",
+    "https://to-do-e1hkv67in-chrinsley.vercel.app",
 ]
 
-
 ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-    if host.strip()
+    "to-do-app-z69s.onrender.com",
 ]
 
 render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
