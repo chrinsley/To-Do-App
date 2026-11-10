@@ -10,23 +10,37 @@ SECRET_KEY = os.environ.get(
     'django-insecure-#szw&ej&dqpvdeufmw)q^d^pp@zl2@83zhvdj7cv%!atbcd)q_',
 )
 
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
-CORS_ALLOWED_ORIGINS = [
-    "https://to-do-e1hkv67in-chrinsley.vercel.app",
-]
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://to-do-e1hkv67in-chrinsley.vercel.app",
-]
+# Render hostname
+render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
+# Allowed hosts
 ALLOWED_HOSTS = [
     "to-do-app-z69s.onrender.com",
 ]
 
-render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
-
 if render_hostname:
     ALLOWED_HOSTS.append(render_hostname)
+
+# CORS configuration
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        "CORS_ALLOWED_ORIGINS",
+        "http://localhost:5173,http://localhost:5174"
+    ).split(",")
+    if origin.strip()
+]
+
+# CSRF configuration
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS.copy()
+
+if render_hostname:
+    CSRF_TRUSTED_ORIGINS.append(
+        f"https://{render_hostname}"
+    )
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
