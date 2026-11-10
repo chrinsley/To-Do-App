@@ -30,7 +30,10 @@ export default function App() {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => setError('Could not load todos. Is the backend running?'))
+      .catch((cause) => {
+        const detail = cause instanceof Error ? ` ${cause.message}` : ''
+        setError(`Could not load todos. Is the backend running?${detail}`)
+      })
       .finally(() => setLoading(false))
   }, [])
 

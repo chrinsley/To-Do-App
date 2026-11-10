@@ -11,7 +11,10 @@ async function request(url, options = {}) {
 }
 
 export async function getTodos() {
-  return request(API_URL)
+  const data = await request(API_URL)
+  if (Array.isArray(data)) return data
+  if (data && Array.isArray(data.results)) return data.results
+  throw new Error('The API response did not contain a todo list.')
 }
 
 export async function createTodo(title) {
