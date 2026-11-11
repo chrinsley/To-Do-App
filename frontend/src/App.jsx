@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getTodos, createTodo, updateTodo, deleteTodo } from './api'
+import AuthPage from './AuthPage'
 
 const FILTERS = ['all', 'active', 'completed']
 
@@ -20,6 +21,15 @@ function getGreeting() {
 }
 
 export default function App() {
+  const authPage = window.location.pathname.replace(/\/+$/, '')
+  if (authPage === '/login' || authPage === '/signup') {
+    return <AuthPage mode={authPage.slice(1)} />
+  }
+
+  return <TodoApp />
+}
+
+function TodoApp() {
   const [todos, setTodos] = useState([])
   const [title, setTitle] = useState('')
   const [loading, setLoading] = useState(true)
