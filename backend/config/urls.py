@@ -17,6 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import path, include
+# from rest_framework_simplejwt.views import (
+#     TokenObtainPairView,
+#     TokenRefreshView
+# )
 
 
 def home(request):
@@ -30,4 +34,6 @@ urlpatterns = [
     path('', home),
     path('admin/', admin.site.urls),
     path('api/', include('todos.urls')),
+    # path('api/login/', TokenObtainPairView.as_view(), name='login'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

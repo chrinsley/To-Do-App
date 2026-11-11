@@ -26,6 +26,9 @@ export default function App() {
   const [error, setError] = useState('')
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
+  const [editingTodoId, setEditingTodoId] = useState(null)
+  const [editTitle, setEditTitle] = useState('')
+  const [savingTodoId, setSavingTodoId] = useState(null)
 
   useEffect(() => {
     getTodos()
@@ -54,9 +57,41 @@ export default function App() {
     setError('')
     try {
       const updated = await updateTodo(todo.id, { completed: !todo.completed })
-      setTodos(todos.map((t) => (t.id === todo.id ? updated : t)))
+      setTodos((currentTodos) => currentTodos.map((t) => (t.id === todo.id ? updated : t)))
     } catch {
       setError('Could not update todo.')
+    }
+  }
+
+  function startEditing(todo) {
+    setEditingTodoId(todo.id)
+    setEditTitle(todo.title)
+    setError('')
+  }
+
+  function cancelEditing() {
+    setEditingTodoId(null)
+    setEditTitle('')
+  }
+
+  async function saveTodo(e, todo) {
+    e.preventDefault()
+    const updatedTitle = editTitle.trim()
+    if (!updatedTitle) {
+      setError('Task title cannot be empty.')
+      return
+    }
+
+    setError('')
+    setSavingTodoId(todo.id)
+    try {
+      const updated = await updateTodo(todo.id, { title: updatedTitle })
+      setTodos((currentTodos) => currentTodos.map((t) => (t.id === todo.id ? updated : t)))
+      cancelEditing()
+    } catch {
+      setError('Could not save todo changes.')
+    } finally {
+      setSavingTodoId(null)
     }
   }
 
@@ -64,7 +99,7 @@ export default function App() {
     setError('')
     try {
       await deleteTodo(id)
-      setTodos(todos.filter((t) => t.id !== id))
+      setTodos((currentTodos) => currentTodos.filter((t) => t.id !== id))
     } catch {
       setError('Could not delete todo.')
     }
@@ -231,14 +266,64 @@ export default function App() {
                   <span className="checkmark" />
                 </label>
                 <div className="item-body">
-                  <span className={`title ${todo.completed ? 'done' : ''}`}>
-                    {todo.title}
-                  </span>
-                  <span className="item-date">{formatDate(todo.created_at)}</span>
+                  {editingTodoId === todo.id ? (
+                    <form className="edit-form" onSubmit={(e) => saveTodo(e, todo)}>
+                      <input
+                        type="text"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        className="input edit-input"
+                        aria-label="Edit task title"
+                        maxLength={200}
+                        autoFocus
+                      />
+                      <div className="edit-actions">
+                        <button
+                          type="submit"
+                          className="btn-save"
+                          disabled={savingTodoId === todo.id}
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-cancel"
+                          onClick={cancelEditing}
+                          disabled={savingTodoId === todo.id}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <>
+                      <span className={`title ${todo.completed ? 'done' : ''}`}>
+                        {todo.title}
+                      </span>
+                      <span className="item-date">{formatDate(todo.created_at)}</span>
+                    </>
+                  )}
                 </div>
-                <button onClick={() => handleDelete(todo.id)} className="btn-delete" title="Delete">
-                  ✕
-                </button>
+                {editingTodoId !== todo.id && (
+                  <>
+                    <button
+                      onClick={() => startEditing(todo)}
+                      className="btn-edit"
+                      title="Edit task"
+                      aria-label={`Edit ${todo.title}`}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(todo.id)}
+                      className="btn-delete"
+                      title="Delete"
+                      aria-label={`Delete ${todo.title}`}
+                    >
+                      ✕
+                    </button>
+                  </>
+                )}
               </li>
             ))}
           </ul>

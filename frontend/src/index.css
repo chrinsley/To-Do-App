@@ -420,6 +420,61 @@ body {
   margin-top: 0.2rem;
 }
 
+.edit-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edit-input {
+  min-width: 8rem;
+  padding: 0.55rem 0.75rem;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.btn-edit,
+.btn-save,
+.btn-cancel {
+  flex-shrink: 0;
+  padding: 0.45rem 0.7rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-edit {
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  background: rgba(99, 102, 241, 0.1);
+  color: #c7d2fe;
+}
+
+.btn-edit:hover {
+  background: rgba(99, 102, 241, 0.2);
+}
+
+.btn-save {
+  border: none;
+  background: #6366f1;
+  color: #fff;
+}
+
+.btn-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: #cbd5e1;
+}
+
+.btn-save:disabled,
+.btn-cancel:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 .btn-delete {
   flex-shrink: 0;
   width: 2rem;
